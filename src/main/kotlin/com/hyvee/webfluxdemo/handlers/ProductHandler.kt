@@ -20,6 +20,18 @@ class ProductHandler(private val validator: Validator) {
     val log = KotlinLogging.logger { }
     val productDb = mutableMapOf("123" to Product("Milk", "123", 2.13))
 
+    /**
+     * We would like the ability to do something like:
+     * GET("/{upc}") { @PathVariable upc: String ->
+     *  if (upc == "123") {
+     *      ServerResponse.ok().syncBody(Product("Milk", "123", 2.13))
+     *  } else {
+     *      ServerResponse.notFound().build()
+     *  }
+     * }
+     *
+     * Same holds for query parameters and request bodies
+     */
     fun getProduct(serverRequest: ServerRequest) =
             if (productDb.containsKey(serverRequest.pathVariable("upc"))) {
                 ServerResponse.ok().syncBody(productDb[serverRequest.pathVariable("upc")]!!)
