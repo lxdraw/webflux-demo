@@ -28,14 +28,10 @@ class ProductRouter(private val productHandler: ProductHandler) {
                  *
                  * Same holds for query parameters and request bodies
                  */
-                GET("/{upc}") { serverRequest ->
-                    if (serverRequest.pathVariable("upc") == "123") {
-                        ServerResponse.ok().syncBody(Product("Milk", "123", 2.13))
-                    } else {
-                        ServerResponse.notFound().build()
-                    }
-                }
+                GET("/{upc}", productHandler::getProduct)
                 POST("", productHandler::addProduct)
+                PUT("", productHandler::updateProduct)
+                DELETE("", productHandler::deleteProduct)
             }
         }
     }.filter { request, next ->
